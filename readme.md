@@ -37,62 +37,47 @@ graph LR
         CHM -- Used by --> Indexer[Python Indexer Script]
         Indexer --> DB
     end
+```
 
+---
 
-Setup Guide for ETABS MCP Server with Local Embeddings
-======================================================
-
-Prerequisites
--------------
+## Prerequisites
 
 Before you begin, ensure you have the following installed:
 
--   **Node.js**: Version 18 or later recommended ([Download](https://nodejs.org/)).
--   **npm**: Usually included with Node.js.
--   **Python**: Version 3.9 or later recommended ([Download](https://www.python.org/)). Ensure `python` and `pip` are in your PATH.
--   **Docker**: Required to run the ChromaDB vector database ([Download Docker Desktop](https://www.docker.com/products/docker-desktop/)). Ensure the Docker daemon/service is running.
--   **ETABS Documentation File**: Your legally obtained `etabs.chm` (or similarly named) file.
--   **CHM Extraction Tool**: An external command-line tool capable of extracting .chm file contents. This script attempts to use `7z` (from 7-Zip) or `chmextract`.
-    -   **Windows**: Install [7-Zip](https://www.7-zip.org/). Ensure `7z.exe` is added to your system's PATH during or after installation.
-    -   **macOS**: Install via Homebrew:
+- **Node.js:** Version 18 or later recommended ([Download](https://nodejs.org/)).
+- **npm:** Usually included with Node.js.
+- **Python:** Version 3.9 or later recommended ([Download](https://www.python.org/)). Ensure `python` and `pip` are in your PATH.
+- **Docker:** Required to easily run the ChromaDB vector database ([Download Docker Desktop](https://www.docker.com/products/docker-desktop/)). Ensure the Docker daemon/service is running.
+- **ETABS Documentation File:** Your legally obtained `etabs.chm` (or similarly named) file.
+- **CHM Extraction Tool:** An external command-line tool capable of extracting `.chm` file contents. This script attempts to use `7z` (from 7-Zip) or `chmextract`.
+  - **Windows:** Install 7-Zip. Ensure `7z.exe` is added to your system's PATH environment variable during or after installation.
+  - **macOS:** Install via Homebrew: `brew install p7zip chmextract` (provides both `7z` and `chmextract`).
+  - **Linux (Debian/Ubuntu):** `sudo apt update && sudo apt install p7zip-full libchm-bin` (provides `7z` and `chmextract`).
 
-        ```
-        brew install p7zip chmextract
+(Verify the tool is callable from your terminal before proceeding).
 
-        ```
+---
 
-    -   **Linux (Debian/Ubuntu)**:
+## Setup Instructions
 
-        ```
-        sudo apt update && sudo apt install p7zip-full libchm-bin
+### Clone the Repository:
 
-        ```
-
-    -   Verify the tool is callable from your terminal before proceeding.
-
-Setup Instructions
-------------------
-
-### Clone the Repository
-
-```
+```bash
 git clone https://github.com/<your-github-username>/etabs-mcp-server-local-embeddings.git
 cd etabs-mcp-server-local-embeddings
-
 ```
+(Replace `<your-github-username>` with your actual username)
 
-Replace `<your-github-username>` with your actual username.
+### Install Node.js Dependencies:
 
-### Install Node.js Dependencies
-
-```
+```bash
 npm install
-
 ```
 
-### Setup Python Environment & Install Dependencies
+### Setup Python Environment & Install Dependencies:
 
-```
+```bash
 # Navigate to the Python indexer directory
 cd index_chm_py
 
@@ -107,177 +92,171 @@ python -m venv .venv
 # Install Python dependencies
 pip install -r requirements.txt
 
-# Stay in this activated environment for the indexing step!
+# IMPORTANT: Stay in this activated environment for the indexing step!
 
-# Go back to the project root when done
-cd ..
-
+# Go back to the project root when done with Python setup/indexing
+# cd ..
 ```
 
-Configuration
--------------
+---
 
-1.  **Copy Example Environment File**:\
-    From the project root directory:
+## Configuration
 
-    ```
-    cp .env.example .env
+Copy Example Environment File: From the project root directory:
 
-    ```
+```bash
+cp .env.example .env
+```
 
-2.  **Edit .env**:\
-    Open the `.env` file in your project root using a text editor and review:
+Edit `.env`: Open the `.env` file in your project root using a text editor.
 
-    -   `CHROMA_COLLECTION_NAME`: Default `etabs_docs_local` is usually fine.
-    -   `LOCAL_EMBEDDING_MODEL`: Default `Xenova/all-MiniLM-L6-v2` is recommended. Changing to other Hugging Face models requires re-indexing.
-    -   `CHROMA_HOST`: Default `http://localhost:8000` matches the Docker command below. Ensure it's reachable from where you run the indexer.
+- Review the `CHROMA_COLLECTION_NAME`. The default `etabs_docs_local` is usually fine.
+- Review the `LOCAL_EMBEDDING_MODEL`. `Xenova/all-MiniLM-L6-v2` is a good default. You can change this to other compatible models from Hugging Face (requires re-indexing if changed later).
+- Review `CHROMA_HOST`. The default `http://localhost:8000` matches the Docker command below. Make sure this is reachable from where you run the indexer.
 
-Running Dependencies (ChromaDB)
--------------------------------
+---
 
-1.  **Start Docker Desktop**: Ensure the Docker application/service is running.
-2.  **Start ChromaDB Container**:\
-    From the project root directory:
+## Running Dependencies (ChromaDB)
 
-    ```
-    # Remove container if it exists from a previous run
-    docker rm -f etabs_chroma_local
+Start Docker Desktop: Ensure the Docker application/service is running.
 
-    # Run ChromaDB, mapping local data directory for persistence
-    docker run -d -p 8000:8000 --name etabs_chroma_local\
-      -v "$(pwd)/chroma_data:/chroma/chroma"\
-      chromadb/chroma
+Start ChromaDB Container: Open a terminal in the project root directory and run:
 
-    ```
+```bash
+# Remove container if it exists from a previous run
+docker rm -f etabs_chroma_local
 
-    This starts ChromaDB detached (`-d`), maps port `8000`, names the container, and maps the local `chroma_data` folder for persistence.
+# Run ChromaDB, mapping local data directory for persistence
+# (Use ` ` for line continuation in PowerShell if needed)
+docker run -d -p 8000:8000 --name etabs_chroma_local \
+  -v "$(pwd)/chroma_data:/chroma/chroma" \
+  chromadb/chroma
+```
 
-Indexing Process (One-Time Setup)
----------------------------------
+This starts ChromaDB detached (`-d`), maps port 8000, names the container, and maps the local `chroma_data` folder for persistence.
 
-This step extracts your .chm file, processes the content, generates embeddings, and populates the ChromaDB database. Only needed once unless the ETABS documentation changes significantly.
+---
 
-1.  **Ensure Dependencies are Running**:
+## Indexing Process (One-Time Setup)
 
-    -   Docker Desktop must be running.
-    -   The `etabs_chroma_local` ChromaDB container must be started (use `docker start etabs_chroma_local` if stopped).
-2.  **Activate Python Virtual Environment**:\
-    If not active, navigate to `index_chm_py` and activate the `.venv`:
+This step extracts your `.chm` file, processes the content, generates embeddings, and populates the ChromaDB database. You only need to do this once, unless your ETABS documentation file changes significantly.
 
-    ```
-    source .venv/bin/activate  # macOS/Linux
-    # or
-    .venv\Scripts\activate.bat  # Windows Command Prompt
+- **Ensure Dependencies are Running:** Docker Desktop must be running, and the `etabs_chroma_local` ChromaDB container must be started (use `docker start etabs_chroma_local` if previously stopped).
+- **Activate Python Virtual Environment:** If not already active, navigate to `index_chm_py` and activate the `.venv` (`source .venv/bin/activate` or Windows equivalent).
+- **Run the Indexer Script:** Execute the following command from within the `index_chm_py` directory (while the venv is active), replacing `<PATH_TO_YOUR_ETABS.CHM>` with the actual, full path to your documentation file:
 
-    ```
+```bash
+python indexer.py --chm-file "<PATH_TO_YOUR_ETABS.CHM>"
+```
 
-3.  **Run the Indexer Script**:\
-    From the `index_chm_py` directory (with venv active), replace `<PATH_TO_YOUR_ETABS.CHM>` with the actual path:
+Use quotes around the path, especially if it contains spaces.
 
-    ```
-    python indexer.py --chm-file "<PATH_TO_YOUR_ETABS.CHM>"
+- **Example (Windows):**
+  ```bash
+  python indexer.py --chm-file "C:\Program Files\Computers and Structures\ETABS 21\etabs.chm"
+  ```
+- **Example (macOS):**
+  ```bash
+  python indexer.py --chm-file "/Applications/ETABS.app/Contents/Resources/etabs.chm"
+  ```
+- **Example (Linux):**
+  ```bash
+  python indexer.py --chm-file "/opt/CSI/ETABS/Documentation/etabs.chm"
+  ```
 
-    ```
+Wait: This process can take time (minutes to hours). Monitor the console output for progress and errors.
 
-    -   Use quotes around the path if it contains spaces.
-    -   Examples:
-        -   Windows: `python indexer.py --chm-file "C:\Program Files\Computers and Structures\ETABS 21\etabs.chm"`
-        -   macOS: `python indexer.py --chm-file "/Applications/ETABS.app/Contents/Resources/etabs.chm"`
-        -   Linux: `python indexer.py --chm-file "/opt/CSI/ETABS/Documentation/etabs.chm"`
-4.  **Wait**: This process may take minutes to hours. Monitor console output for progress and errors.
+---
 
-Running the MCP Server
-----------------------
+## Running the MCP Server
 
 Once indexing is complete and ChromaDB is running:
 
-1.  **Navigate to Project Root**:\
-    Ensure your terminal is in the `etabs-mcp-server-local-embeddings` directory.
+- **Navigate to Project Root:** Ensure your terminal is in the main `etabs-mcp-server-local-embeddings` directory.
+- **Build the Node.js Server (if you made code changes):**
 
-2.  **Build the Node.js Server** (if code changes were made):
+  ```bash
+  npm run build
+  ```
 
-    ```
-    npm run build
+- **Start the Server:**
 
-    ```
+  ```bash
+  npm start
+  ```
 
-3.  **Start the Server**:
+  Alternatively, for development with auto-reloading: `npm run dev`
 
-    ```
-    npm start
+The server will load the embedding model (this might take a moment the very first time you run `npm start` or `npm run dev` after cloning) and then print `...running on stdio.` to the console's standard error output. It is now waiting for an MCP client connection.
 
-    ```
+---
 
-    Alternatively, for development with auto-reloading:
+## Connecting to a Client (Example: Claude Desktop)
 
-    ```
-    npm run dev
+- **Locate/Create Claude Desktop Config:**
+  - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+  - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
 
-    ```
+- **Edit the Config:** Add an entry for your server within the `mcpServers` object, using the absolute path to the compiled `build/server.js` file.
 
-    The server loads the embedding model (may take a moment initially) and prints `...running on stdio.` to the console's standard error output, indicating it's ready for an MCP client connection.
-
-Connecting to a Client (Example: Claude Desktop)
-------------------------------------------------
-
-1.  **Locate/Create Claude Desktop Config**:
-
-    -   Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-    -   macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-2.  **Edit the Config**:\
-    Add an entry for your server in the `mcpServers` object with the absolute path to `build/server.js`:
-
-    ```
-    {
-      "mcpServers": {
-        "etabs-local-docs": {
-          "command": "node",
-          "args": [
-            "YOUR_ABSOLUTE_PATH_TO_PROJECT/etabs-mcp-server-local-embeddings/build/server.js"
-          ]
-        }
-      }
+```json
+{
+  "mcpServers": {
+    // Add other servers here if you have them
+    "etabs-local-docs": {
+      "command": "node", // Or full path to node.exe if needed
+      "args": [
+        // --- REPLACE WITH YOUR ABSOLUTE PATH ---
+        // Windows Example: "C:\\Users\\YourUser\\Projects\\etabs-mcp-server-local-embeddings\\build\\server.js"
+        // macOS Example: "/Users/youruser/Projects/etabs-mcp-server-local-embeddings/build/server.js"
+        // Linux Example: "/home/youruser/projects/etabs-mcp-server-local-embeddings/build/server.js"
+        "YOUR_ABSOLUTE_PATH_TO_PROJECT/etabs-mcp-server-local-embeddings/build/server.js"
+      ]
+      // "env": {} // Environment variables needed by the Node.js server can be added here if not using .env properly
     }
+  }
+}
+```
 
-    ```
+(Remember to use double backslashes `\\` on Windows paths within the JSON string)
 
-    -   Replace with the actual path (use double backslashes `\\` for Windows).
-    -   Example paths:
-        -   Windows: `C:\\Users\\YourUser\\Projects\\etabs-mcp-server-local-embeddings\\build\\server.js`
-        -   macOS: `/Users/youruser/Projects/etabs-mcp-server-local-embeddings/build/server.js`
-        -   Linux: `/home/youruser/projects/etabs-mcp-server-local-embeddings/build/server.js`
-3.  **Save and Restart**:\
-    Save the config file, fully quit Claude Desktop (check system tray/menu bar), and reopen.
+Save the config file.
 
-4.  **Verify**:\
-    Look for the hammer icon in Claude Desktop. Click it to confirm the `search_etabs_docs` tool is listed.
+Restart Claude Desktop completely. Ensure it's fully quit (check system tray/menu bar) before reopening.
 
-Troubleshooting
----------------
+**Verify:** Look for the hammer icon <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/claude-desktop-mcp-hammer-icon.svg" style="display: inline; margin: 0; height: 1.3em;" /> in Claude Desktop. Click it to confirm your `search_etabs_docs` tool is listed.
 
-### Indexing Fails
+---
 
--   Check Python error messages.
--   Verify the .chm file path is correct.
--   Ensure the CHM extraction tool (`7z` or `chmextract`) is installed and in PATH. Test it manually on a file.
--   Confirm the ChromaDB container (`etabs_chroma_local`) is running (`docker ps`).
--   Ensure the Python virtual environment is activated and `pip install -r requirements.txt` was successful.
+## Troubleshooting
 
-### Server Fails to Start (`npm start`)
+### Indexing Fails:
 
--   Did `npm run build` complete without errors? Check terminal output.
--   Check for issues loading the embedding model (requires sufficient RAM/CPU).
--   Review terminal output for errors.
+- Check Python error messages.
+- Verify the `.chm` file path is correct.
+- Ensure the CHM extraction tool (`7z` or `chmextract`) is installed correctly and in your system's PATH. Try running the tool manually from the command line on a test file.
+- Confirm the ChromaDB container (`etabs_chroma_local`) is running (`docker ps`).
+- Make sure the Python virtual environment is activated and `pip install -r requirements.txt` was successful.
 
-### Claude Desktop Connection Fails
+### Server Fails to Start (`npm start`):
 
--   Double-check the absolute path to `build/server.js` in `claude_desktop_config.json`. Ensure correct path separators.
--   Is Node.js installed and in PATH? Try the full path to `node.exe`/`node` in the config.
--   Did the server exit early? Run `npm start` manually to check for errors.
--   Is the ChromaDB container running? The server may crash if it can't connect.
--   Check Claude logs: In Developer settings, click "Open Logs Folder". Review `mcp.log` and `mcp-server-etabs-local-docs.log` for errors.
+- Did `npm run build` complete without errors? Check the terminal output.
+- Could be an issue loading the embedding model (requires sufficient RAM/CPU). Check terminal output for errors.
 
-License
--------
+### Claude Desktop Connection Fails ("failed" status in Settings > Developer):
 
-This project is currently provided without an explicit open-source license. Be mindful of standard copyright laws. To distribute or modify this code significantly, consider adding an appropriate license (e.g., MIT, Apache 2.0) by creating a `LICENSE` file in the repository root.
+- Double-check the absolute path to `build/server.js` in `claude_desktop_config.json`. Ensure correct path separators (`\\` for Windows).
+- Is Node.js installed and in the PATH? Try using the full path to `node.exe`/`node` in the command field of the config.
+- Did the server script exit early? Try `npm start` manually in the terminal to see if it stays running or prints errors.
+- Is the ChromaDB container running? The Node.js server might crash if it can't connect.
+- Check Claude logs: Click "Open Logs Folder" in Claude's Developer settings. Look at `mcp.log` and `mcp-server-etabs-local-docs.log` (or your server name). `console.error` messages from your Node.js script appear here.
+
+---
+
+## License
+
+This project is currently provided without an explicit open-source license. Please be mindful of standard copyright laws. If you intend to distribute or modify this code significantly, consider adding an appropriate open-source license (e.g., MIT, Apache 2.0) by creating a LICENSE file in the repository root.
+
+Remember that any license you choose applies only to the code in this repository, not to the ETABS documentation itself.
+
+--- 
