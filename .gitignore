@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+index_chm_py/.venv/
+
+# Build output
+build/
+
+# Local data and secrets
+chroma_data/
+models/
+*.log
+.env
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE config
+.vscode/
+.idea/

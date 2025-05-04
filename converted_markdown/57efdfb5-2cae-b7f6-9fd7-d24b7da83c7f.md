@@ -1,0 +1,87 @@
+﻿
+
+CSI API ETABS v1
+
+# cDCoNZS_3101_2006GetPreference Method  
+  
+---  
+  
+**Namespace:** [ETABSv1](2780f1b8-2033-5289-2298-1cdb2a7508d9.htm)  
+**Assembly:** ETABSv1 (in ETABSv1.dll) Version: 1.0.0.0 (1.27.0.0)
+
+![](../icons/SectionExpanded.png)Syntax
+
+C#
+
+VB
+
+C++
+
+F#
+
+Copy
+
+    
+    
+    int GetPreference(
+    	int Item,
+    	ref double Value
+    )
+    
+    
+    Function GetPreference ( 
+    	Item As Integer,
+    	ByRef Value As Double
+    ) As Integer
+    
+    Dim instance As cDCoNZS_3101_2006
+    Dim Item As Integer
+    Dim Value As Double
+    Dim returnValue As Integer
+    
+    returnValue = instance.GetPreference(Item, 
+    	Value)
+    
+    
+    int GetPreference(
+    	int Item, 
+    	double% Value
+    )
+    
+    
+    abstract GetPreference : 
+            Item : int * 
+            Value : float byref -> int 
+    
+
+#### Parameters
+
+Item
+
+    Type: [SystemInt32](https://docs.microsoft.com/dotnet/api/system.int32)  
+
+Value
+
+    Type: [SystemDouble](https://docs.microsoft.com/dotnet/api/system.double)  
+
+#### Return Value
+
+Type: [Int32](https://docs.microsoft.com/dotnet/api/system.int32)
+
+![](../icons/SectionExpanded.png)See Also
+
+#### Reference
+
+[cDCoNZS_3101_2006 Interface](6b06dee2-5704-a111-41b6-23c6e5e7283e.htm)
+
+[ETABSv1 Namespace](2780f1b8-2033-5289-2298-1cdb2a7508d9.htm)
+
+ETABS®, SAFE®, SAP2000® and CSiBridge® are registered trademarks of Computers
+and Structures, Inc.  
+
+[Copyright © Computers and Structures, Inc. 2023. All rights
+reserved.](http://www.csiamerica.com)
+
+Send comments on this topic to
+[support@csiamerica.com](mailto:support%40csiamerica.com?Subject=CSI%20API%20ETABS%20v1)
+

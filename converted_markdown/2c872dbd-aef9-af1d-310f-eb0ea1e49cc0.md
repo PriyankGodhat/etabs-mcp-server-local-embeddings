@@ -1,0 +1,73 @@
+﻿
+
+CSI API ETABS v1
+
+# cDCoACI318_19 Interface  
+  
+---  
+  
+**Namespace:** [ETABSv1](2780f1b8-2033-5289-2298-1cdb2a7508d9.htm)  
+**Assembly:** ETABSv1 (in ETABSv1.dll) Version: 1.0.0.0 (1.27.0.0)
+
+![](../icons/SectionExpanded.png)Syntax
+
+C#
+
+VB
+
+C++
+
+F#
+
+Copy
+
+    
+    
+    public interface cDCoACI318_19
+    
+    
+    Public Interface cDCoACI318_19
+    
+    Dim instance As cDCoACI318_19
+    
+    
+    public interface class cDCoACI318_19
+    
+    
+    type cDCoACI318_19 =  interface end
+
+The cDCoACI318_19 type exposes the following members.
+
+![](../icons/SectionExpanded.png)Methods
+
+| Name| Description  
+---|---|---  
+![Public method](../icons/pubmethod.gif)|
+[GetOverwrite](63644c98-c49c-8563-e9b5-49b409fd5ab9.htm)|  Retrieves the value
+of a concrete design overwrite item.  
+![Public method](../icons/pubmethod.gif)|
+[GetPreference](e706423d-c27f-a90d-2830-9ff6b3bfb363.htm)|  Retrieves the
+value of a concrete design preference item.  
+![Public method](../icons/pubmethod.gif)|
+[SetOverwrite](6706c66b-90fb-e2ef-38ec-efe3f659947f.htm)|  Sets the value of a
+concrete design overwrite item.  
+![Public method](../icons/pubmethod.gif)|
+[SetPreference](00d5c357-5232-c82a-928d-9859705f55ec.htm)|  Sets the value of
+a concrete design preference item.  
+Top
+
+![](../icons/SectionExpanded.png)See Also
+
+#### Reference
+
+[ETABSv1 Namespace](2780f1b8-2033-5289-2298-1cdb2a7508d9.htm)
+
+ETABS®, SAFE®, SAP2000® and CSiBridge® are registered trademarks of Computers
+and Structures, Inc.  
+
+[Copyright © Computers and Structures, Inc. 2023. All rights
+reserved.](http://www.csiamerica.com)
+
+Send comments on this topic to
+[support@csiamerica.com](mailto:support%40csiamerica.com?Subject=CSI%20API%20ETABS%20v1)
+

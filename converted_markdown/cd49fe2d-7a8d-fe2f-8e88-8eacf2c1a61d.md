@@ -1,0 +1,76 @@
+﻿
+
+CSI API ETABS v1
+
+# cPropLineSpring Interface  
+  
+---  
+  
+**Namespace:** [ETABSv1](2780f1b8-2033-5289-2298-1cdb2a7508d9.htm)  
+**Assembly:** ETABSv1 (in ETABSv1.dll) Version: 1.0.0.0 (1.27.0.0)
+
+![](../icons/SectionExpanded.png)Syntax
+
+C#
+
+VB
+
+C++
+
+F#
+
+Copy
+
+    
+    
+    public interface cPropLineSpring
+    
+    
+    Public Interface cPropLineSpring
+    
+    Dim instance As cPropLineSpring
+    
+    
+    public interface class cPropLineSpring
+    
+    
+    type cPropLineSpring =  interface end
+
+The cPropLineSpring type exposes the following members.
+
+![](../icons/SectionExpanded.png)Methods
+
+| Name| Description  
+---|---|---  
+![Public method](../icons/pubmethod.gif)|
+[ChangeName](59b7beb4-6d1e-4ce6-51dd-6420d6a932ee.htm)|  Changes the name of a
+defined line spring property  
+![Public method](../icons/pubmethod.gif)|
+[Delete](5a732241-100b-fb21-a3d7-1de9cf5a7954.htm)|  Deletes the specified
+line spring property  
+![Public method](../icons/pubmethod.gif)|
+[GetLineSpringProp](2408ddb9-163b-4173-1a82-c49385607ec8.htm)|  Retrieves an
+existing named line spring property  
+![Public method](../icons/pubmethod.gif)|
+[GetNameList](6937abaa-622f-d4ab-1093-7d99d6b7722b.htm)|  Retrieves the names
+of all defined line spring property  
+![Public method](../icons/pubmethod.gif)|
+[SetLineSpringProp](4c64029f-f344-f8a9-f34f-0ef5054a46f1.htm)|  Creates a new
+named line spring property, or modifies an existing named line spring property  
+Top
+
+![](../icons/SectionExpanded.png)See Also
+
+#### Reference
+
+[ETABSv1 Namespace](2780f1b8-2033-5289-2298-1cdb2a7508d9.htm)
+
+ETABS®, SAFE®, SAP2000® and CSiBridge® are registered trademarks of Computers
+and Structures, Inc.  
+
+[Copyright © Computers and Structures, Inc. 2023. All rights
+reserved.](http://www.csiamerica.com)
+
+Send comments on this topic to
+[support@csiamerica.com](mailto:support%40csiamerica.com?Subject=CSI%20API%20ETABS%20v1)
+
