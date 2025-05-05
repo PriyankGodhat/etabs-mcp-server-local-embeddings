@@ -29,14 +29,12 @@ This project consists of two main parts:
 
 ```mermaid
 graph LR
-    subgraph "User's Machine"
-        U[User] --> Client[MCP Client e.g., Claude Desktop]
-        Client <-->|MCP (stdio)| Server[Node.js MCP Server]
-        Server <-->|HTTP| DB[(ChromaDB via Docker)]
-        User -- Provides --> CHM[ETABS .chm File]
-        CHM -- Used by --> Indexer[Python Indexer Script]
-        Indexer --> DB
-    end
+    U[User] --> Client[MCP Client e.g., Claude Desktop]
+    Client -- MCP (stdio) --> Server[Node.js MCP Server]
+    Server -- HTTP --> DB[(ChromaDB via Docker)]
+    User -- Provides --> CHM[ETABS .chm File]
+    CHM -- Used by --> Indexer[Python Indexer Script]
+    Indexer --> DB
 ```
 
 ---
