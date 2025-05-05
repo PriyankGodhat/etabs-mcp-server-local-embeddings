@@ -255,8 +255,7 @@ Restart Claude Desktop completely. Ensure it's fully quit (check system tray/men
 
 ## License
 
-This project is currently provided without an explicit open-source license. Please be mindful of standard copyright laws. If you intend to distribute or modify this code significantly, consider adding an appropriate open-source license (e.g., MIT, Apache 2.0) by creating a LICENSE file in the repository root.
+This project is licensed under the MIT License. See the LICENSE file for details. Remember that this license applies only to the code in this repository, not to the ETABS documentation itself.
 
-Remember that any license you choose applies only to the code in this repository, not to the ETABS documentation itself.
 
 --- 
