@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/priyankgodhat-etabs-mcp-server-local-embeddings-badge.png)](https://mseep.ai/app/priyankgodhat-etabs-mcp-server-local-embeddings)
+
 # ETABS Documentation Assistant MCP Server (Local Embeddings)
 
 This project provides a Model Context Protocol (MCP) server that allows AI models (like Anthropic's Claude via Claude Desktop) to perform semantic searches on **user-provided** ETABS documentation. It uses local sentence transformer models for embedding generation (via `@xenova/transformers.js`) and ChromaDB for vector storage, making it free to run after initial setup.
